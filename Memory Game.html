@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Memory game</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+    <style>
+        html {
+            display: flex;
+        }
+
+        body {
+            padding-top: 4rem;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            margin: auto;
+            gap: 1rem
+        }
+
+        .card {
+            display: grid;
+            place-items: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            width: 120px;
+            height: 120px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .free {
+            background-color: #1c94c4;
+        }
+
+        .chosen {
+            background-color: gray;
+        }
+    </style>
+</head>
+<body>
+<div class="card free">
+    <p></p>
+    <p>John</p>
+</div>
+<div class="card free">
+    <p></p>
+    <p>Emily</p>
+</div>
+<div class="card free">
+    <p></p>
+    <p>Michael</p>
+</div>
+<div class="card free">
+    <p></p>
+    <p>Sarah</p>
+</div>
+<div class="card free">
+    <p></p>
+    <p>David</p>
+</div>
+<div class="card free">
+    <p></p>
+    <p>Jessica</p>
+</div>
+<div class="card free">
+    <p></p>
+    <p>Daniel</p>
+</div>
+<div class="card free">
+    <p></p>
+    <p>Amanda</p>
+</div>
+<div class="card free">
+    <p></p>
+    <p>John</p>
+</div>
+<div class="card free">
+    <p></p>
+    <p>Emily</p>
+</div>
+<div class="card free">
+    <p></p>
+    <p>Michael</p>
+</div>
+<div class="card free">
+    <p></p>
+    <p>Sarah</p>
+</div>
+<div class="card free">
+    <p></p>
+    <p>David</p>
+</div>
+<div class="card free">
+    <p></p>
+    <p>Jessica</p>
+</div>
+<div class="card free">
+    <p></p>
+    <p>Daniel</p>
+</div>
+<div class="card free">
+    <p></p>
+    <p>Amanda</p>
+</div>
+
+<script>
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    }
+
+    let cardsArray = $(".card").toArray();
+    shuffle(cardsArray);
+    cardsArray.map((el, i) => {
+        $(el).children().eq(0).text(i + 1)
+    })
+    $("body").append(cardsArray);
+
+    let cards = [];
+
+    $(".card p:odd").hide()
+
+    $.each($('.free'), function (i, el) {
+        applyCardLogic(el)
+    })
+
+
+    function applyCardLogic(el) {
+        $(el).click(function () {
+            cards.push($(this))
+            $(this).off('click')
+            $(this).children().toggle()
+            if (cards.length > 1) handleGame()
+        })
+
+    }
+
+    function handleGame() {
+        console.log(cards);
+        let first = $(cards[0])
+        let second = $(cards[1])
+
+        let firstCardText = first.children().eq(1).text();
+        let secondCardText = second.children().eq(1).text();
+
+        console.log(firstCardText === secondCardText);
+
+        if (firstCardText === secondCardText) {
+            $.each(cards, function (i, el) {
+                $(el).removeClass('free')
+                $(el).addClass('chosen')
+            })
+        } else {
+
+            setTimeout(() => {
+                cards = []
+                first.children().toggle()
+                second.children().toggle()
+                applyCardLogic(first)
+                applyCardLogic(second)
+            }, 850)
+        }
+        cards = []
+
+    }
+</script>
+</body>
+
+</html>
